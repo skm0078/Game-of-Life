@@ -1,5 +1,7 @@
+import java.util.Scanner;
+
 /**
- * Write a description of class Life here.
+ * Description of class Life:
  *
  * @author Swarnakeshar Mukherjee
  * @version 05-08-2021
@@ -7,32 +9,59 @@
 
 public class Life
 {
-    public static final int ROWS = 20;
-    public static final int COLS = 80;
+    public static int ROWS = 20;
+    public static int COLS = 80;
+    public static int getROWS() {
+        return ROWS;
+    }
+
+    public static void setROWS(int ROWS) {
+        Life.ROWS = ROWS;
+    }
+
+    public static int getCOLS() {
+        return COLS;
+    }
+
+    public static void setCOLS(int COLS) {
+        Life.COLS = COLS;
+    }
+
     public static final int TIME_DELAY=500;
 
     /**
-     * The intializeBoard static method sets up the initial board with a
+     * The automated intializeBoard static method sets up the initial board with a
      * random set of cells.
      * @param b a Board, typically empty
      */
-public static void initializeBoard(Board b){
-    for(int r=0; r < ROWS; r++ ){
-        for(int c=0; c < COLS; c++){
-            int randVal = (int) (Math.random() * 3);
-            if(randVal == 0){
-                b.set(r,c,1);
+    public static void initializeBoard(Board b){
+        for(int r=0; r < ROWS; r++ ){
+            for(int c=0; c < COLS; c++){
+                int randVal = (int) (Math.random() * 3);
+                if(randVal == 0){
+                    b.set(r,c,1);
+                }
             }
         }
     }
-}
+
+    /**
+     * The manual intializeBoard static method sets up the initial board with a
+     * random set of cells.
+     * @param b a Board, typically empty
+     */
+    public static void initializeBoard(Board b,int [][] cellArray){
+        for (int i=0;i<cellArray.length;i++){
+            b.set(cellArray[i][0],cellArray[i][1],1);
+        }
+    }
 
 
 
     /**
      * The static displayBoard method displays the board on screen. A Board
      * is a 2-dimensional int[][] array, so for the display to include other
-     * characters--"." and "0", for example--characters will need to be printed
+     * characters--"-" and "+", for example--characters will need to be printed
      * on the screen after checking the int value of that location.
      * @param board the board to be displayed
      */
@@ -41,9 +70,9 @@ public static void initializeBoard(Board b){
         for(int r = 0; r < ROWS; r++){
             for(int c = 0; c < COLS; c++){
                 if(board.get(r,c) == 0){
-                    System.out.print(".");
+                    System.out.print("-");
                 }else if(board.get(r,c) == 1){
-                    System.out.print("*");
+                    System.out.print("+");
                 }
             }
             System.out.println();
@@ -150,17 +179,48 @@ public static void initializeBoard(Board b){
         }
     }
 
+
     public static void main(String[] args)
     {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of Rows: ");
+        ROWS=sc.nextInt();
+        System.out.println("Enter Number of Columns: ");
+        COLS=sc.nextInt();
         Board board = new Board(ROWS,COLS);
         Board nextBoard = new Board(ROWS,COLS);
-        initializeBoard(board);
-        for(int i=0;i<100;i++){
+        System.out.println("Automate 10 Generations ?: Y, Manual: N ");
+        char ans = sc.next().charAt(0);
+        if(ans=='Y' || ans == 'y'){
+            for(int i=0;i<10;i++){
+                clearConsole();
+                displayBoard(board);
+                slow(TIME_DELAY);
+                calculateNextGeneration(board,nextBoard);
+                transferNextToCurrent(board, nextBoard);
+                initializeBoard(board);
+            }
+        }else if(ans=='N' || ans == 'n'){
+            System.out.println("Enter the number of cells you wish to activate: ");
+            int numOfCells = sc.nextInt();
+            System.out.println("Enter the cell Positions: ");
+            int [][] cellArray = new int[ROWS][COLS];
+            for (int i=0;i<numOfCells;i++){
+                cellArray[i][0] = sc.nextInt();
+                cellArray[i][1] = sc.nextInt();
+            }
             clearConsole();
             displayBoard(board);
             slow(TIME_DELAY);
-            calculateNextGeneration(board,nextBoard);
-            transferNextToCurrent(board, nextBoard);
+            System.out.println("Press N to move to next Generation.");
+            String gen = sc.next();
+            // Insert a while condition
+            if(gen.charAt(0) == 'N' || gen.charAt(0) == 'n'){
+                calculateNextGeneration(board,nextBoard);
+                transferNextToCurrent(board, nextBoard);
+            }
+            initializeBoard(board,cellArray);
         }
+
     }
 }
