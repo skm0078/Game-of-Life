@@ -50,12 +50,12 @@ public class Life
      * random set of cells.
      * @param b a Board, typically empty
      */
-    public static void initializeBoard(Board b,int [][] cellArray){
-        for (int i=0;i<cellArray.length;i++){
-            b.set(cellArray[i][0],cellArray[i][1],1);
-        }
-    }
+    public static void initializeBoard(Board b,int [] cellArray){
 
+        for(int i=0; i < cellArray.length-1; i=i+2){
+                b.set(cellArray[i],cellArray[i+1],1);
+            }
+    }
 
 
     /**
@@ -204,22 +204,27 @@ public class Life
             System.out.println("Enter the number of cells you wish to activate: ");
             int numOfCells = sc.nextInt();
             System.out.println("Enter the cell Positions: ");
-            int [][] cellArray = new int[ROWS][COLS];
+            int [] cellArray = new int[numOfCells * 2];
             for (int i=0;i<numOfCells;i++){
-                cellArray[i][0] = sc.nextInt();
-                cellArray[i][1] = sc.nextInt();
+                cellArray[i] = sc.nextInt();
+                cellArray[i] = sc.nextInt();
             }
-            clearConsole();
-            displayBoard(board);
-            slow(TIME_DELAY);
-            System.out.println("Press N to move to next Generation.");
-            String gen = sc.next();
-            // Insert a while condition
-            if(gen.charAt(0) == 'N' || gen.charAt(0) == 'n'){
-                calculateNextGeneration(board,nextBoard);
-                transferNextToCurrent(board, nextBoard);
-            }
-            initializeBoard(board,cellArray);
+
+            boolean step = true;
+            do {
+                System.out.println("Press S to move to next Generation. N to Exit");
+                String gen = sc.next();
+                // Insert a while condition
+                if(gen.charAt(0) == 'S' || gen.charAt(0) == 's'){
+                    clearConsole();
+                    displayBoard(board);
+                    calculateNextGeneration(board,nextBoard);
+                    transferNextToCurrent(board, nextBoard);
+                    initializeBoard(board,cellArray);
+                }else if(gen.charAt(0) == 'N' || gen.charAt(0) == 'n') {
+                    step =false;
+                }
+            }while (step);
         }
 
     }
