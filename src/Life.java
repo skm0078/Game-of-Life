@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -213,14 +212,17 @@ public class Life
             System.out.println("Enter the cell Positions: ");
             int [] cellArray = new int[numOfCells*2];
             for (int i=0;i<cellArray.length;i++){
-                cellArray[i] = sc.nextInt();
+                int val =sc.nextInt();
+                if(val<=ROWS && val <=COLS)
+                    cellArray[i] = val;
+                else
+                    System.out.println("Please activate a cell within the bounds of the Number of Rows & Columns");
             }
 
             boolean step = true;
             do {
                 System.out.println("Press S to move to next Generation. N to Exit");
                 String gen = sc.next();
-                // Insert a while condition
                 if(gen.charAt(0) == 'S' || gen.charAt(0) == 's'){
                     clearConsole();
                     displayBoard(board);
@@ -229,8 +231,13 @@ public class Life
                     initializeBoard(board,cellArray);
                 }else if(gen.charAt(0) == 'N' || gen.charAt(0) == 'n') {
                     step = false;
+                }else {
+                    System.out.println("Try again...");
+                    step=true;
                 }
             }while (step);
+        }else {
+            System.out.println("Invalid Input");
         }
 
     }
