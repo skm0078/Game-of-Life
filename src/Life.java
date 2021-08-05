@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -52,9 +53,15 @@ public class Life
      */
     public static void initializeBoard(Board b,int [] cellArray){
 
-        for(int i=0; i < cellArray.length-1; i=i+2){
-                b.set(cellArray[i],cellArray[i+1],1);
+        for(int r=0; r < ROWS; r++ ){
+            for(int c=0; c < COLS; c++){
+                    for (int i=0; i < cellArray.length-1;i=i+2){
+                        if(r==cellArray[i] && c== cellArray[i+1]){
+                            b.set(r,c,1);
+                        }
+                }
             }
+        }
     }
 
 
@@ -204,9 +211,8 @@ public class Life
             System.out.println("Enter the number of cells you wish to activate: ");
             int numOfCells = sc.nextInt();
             System.out.println("Enter the cell Positions: ");
-            int [] cellArray = new int[numOfCells * 2];
-            for (int i=0;i<numOfCells;i++){
-                cellArray[i] = sc.nextInt();
+            int [] cellArray = new int[numOfCells*2];
+            for (int i=0;i<cellArray.length;i++){
                 cellArray[i] = sc.nextInt();
             }
 
@@ -222,7 +228,7 @@ public class Life
                     transferNextToCurrent(board, nextBoard);
                     initializeBoard(board,cellArray);
                 }else if(gen.charAt(0) == 'N' || gen.charAt(0) == 'n') {
-                    step =false;
+                    step = false;
                 }
             }while (step);
         }
