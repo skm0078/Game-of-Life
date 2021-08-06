@@ -152,7 +152,7 @@ public class Life
      */
     private static void clearConsole()
     {
-        System.out.print("\033[H\033[2J"); // codes to clear the console to observe changes to next generations
+        System.out.println("\033[H\033[2J"); // codes to clear the console to observe changes to next generations
         System.out.flush();
     }
 
