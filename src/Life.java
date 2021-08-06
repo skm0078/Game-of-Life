@@ -9,23 +9,8 @@ import java.util.Scanner;
 
 public class Life
 {
-    public static int ROWS = 20;
-    public static int COLS = 80;
-    public static int getROWS() {
-        return ROWS;
-    }
-
-    public static void setROWS(int ROWS) {
-        Life.ROWS = ROWS;
-    }
-
-    public static int getCOLS() {
-        return COLS;
-    }
-
-    public static void setCOLS(int COLS) {
-        Life.COLS = COLS;
-    }
+    public static int ROWS ;
+    public static int COLS ;
 
     public static final int TIME_DELAY=500;
 
@@ -93,7 +78,7 @@ public class Life
      * 1. existing cell dies if fewer than 2 neighbors (underpopulation)
      * 2. existing cell lives if 2-3 neighbors ("these neighbors are JUST RIGHT!")
      * 3. existing cell dies if greater than 3 neighbors (overpopulation)
-     * 4. empty cell becomes alive if exactly 3 neighbors (because...?)
+     * 4. empty cell becomes alive if exactly 3 neighbors (Remains in state)
      *
      * @param b the current board
      * @param nextB a board with the new generation on it
@@ -167,7 +152,7 @@ public class Life
      */
     private static void clearConsole()
     {
-        System.out.print("\033[H\033[2J");
+        System.out.print("\033[H\033[2J"); // codes to clear the console to observe changes to next generations
         System.out.flush();
     }
 
@@ -195,6 +180,7 @@ public class Life
         COLS=sc.nextInt();
         Board board = new Board(ROWS,COLS);
         Board nextBoard = new Board(ROWS,COLS);
+        // Either Automate next generations or to Manually set active states and track changes across generations
         System.out.println("Automate 10 Generations ?: Y, Manual: N ");
         char ans = sc.next().charAt(0);
         if(ans=='Y' || ans == 'y'){
@@ -207,16 +193,19 @@ public class Life
                 initializeBoard(board);
             }
         }else if(ans=='N' || ans == 'n'){
-            System.out.println("Enter the number of cells you wish to activate: ");
+            System.out.println("Enter the number of cells you wish to activate: Co-Ordinate System Starting from (0,0) - (r-1)-(c-1) ");
             int numOfCells = sc.nextInt();
             System.out.println("Enter the cell Positions: ");
             int [] cellArray = new int[numOfCells*2];
             for (int i=0;i<cellArray.length;i++){
                 int val =sc.nextInt();
-                if(val<=ROWS && val <=COLS)
-                    cellArray[i] = val;
-                else
+                if(val<ROWS && val <COLS && val >= 0) {
+                   cellArray[i] = val;
+                }
+                else{
                     System.out.println("Please activate a cell within the bounds of the Number of Rows & Columns");
+                    System.exit(0);
+                }
             }
 
             boolean step = true;
